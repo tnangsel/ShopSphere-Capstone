@@ -1,6 +1,7 @@
 package com.cogent.main.service;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +21,20 @@ public class DiscountService {
 	@Autowired
 	private DiscountRepository discountRepository;
 	
-	public DiscountDao fetchDiscount(Integer discountId) {
-		Optional<DiscountEntity> discountEntity = discountRepository.findById(discountId);
+	public Integer fetchDiscount(String discountCode) {
+		Optional<DiscountEntity> discountEntity = discountRepository.findByCode(discountCode);
 		
-		System.out.println(discountEntity);
-		if(discountEntity.isPresent()) {
-			return DiscountDao.builder()
-				.discountCode(discountEntity.get().getDiscountCode())
-//				.discountPrice(discountEntity.get().getDiscountPrice())
-				.build();
-		}else {
-			return new DiscountDao();
-		}
-		
+//		System.out.println(discountEntity);
+//		if(discountEntity.isPresent()) {
+//			byte[] dCode = Base64.getDecoder().decode(discountEntity.get().getDiscountCode());
+//			return  DiscountDao.builder()
+//					.discountCode(dCode)
+//					.build();
+//			
+//		}else {
+//			return new DiscountDao();
+//		}
+		return (int)discountEntity.get().getDiscountPrice();
 	}
 
 	public DiscountDao addDiscount(DiscountDao discountDao, String header) {
@@ -60,6 +62,10 @@ public class DiscountService {
 		} else {
 			return new DiscountDao();
 		}
+	}
+
+	public List<DiscountEntity> getAllDiscounts() {
+		return discountRepository.findAll();
 	}
 
 	

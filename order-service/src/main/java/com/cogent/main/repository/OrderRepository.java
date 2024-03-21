@@ -13,6 +13,8 @@ import com.google.common.base.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Integer>{
 	
+	@Query(value = "from OrderEntity where user.email= :email")
+	List<OrderEntity> findAllByEmail(String email);
 	
 //	@Query(value = "from OrderEntity where user_id= : userId")
 //	List<OrderEntity> findAllOrderByUserId(Integer userId);

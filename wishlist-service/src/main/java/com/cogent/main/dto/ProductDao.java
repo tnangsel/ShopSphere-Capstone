@@ -1,5 +1,6 @@
 package com.cogent.main.dto;
 
+import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class ProductDao {
 	private String title;
 	private String description;
 	private double price;
-    private String category;
+	@Embedded
+    private CategoryDao category;
     private int quantity;
 }

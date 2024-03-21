@@ -24,5 +24,10 @@ public interface CartRepository extends JpaRepository<CartEntity, Integer> {
 
 	@Query(value = "from CartEntity where user_id= :userId")
 	List<CartEntity> findByUserId(Integer userId);
+
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM CartEntity WHERE user_id = :userId")
+	void deleteAllProducts(Integer userId);
 	
 }

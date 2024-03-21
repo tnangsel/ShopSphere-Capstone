@@ -3,8 +3,9 @@ package com.cogent.main.dto;
 import java.util.List;
 
 import com.cogent.main.entity.ProductEntity;
-import com.cogent.main.entity.UserEntity;
+//import com.cogent.main.entity.UserEntity;
 
+import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +18,8 @@ import lombok.NoArgsConstructor;
 public class OrderDao {
 	
 	private String status;
-	
-    private UserEntity user;
+	@Embedded
+    private UserDao user;
 	
     private List<ProductEntity> products;
 	

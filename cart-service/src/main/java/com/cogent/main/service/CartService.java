@@ -97,14 +97,16 @@ public class CartService {
 
 	public String removedAllProducts(Integer userId, String header) {
 		UserDao userD = userClientInCart.getOneUser(userId, header);
-		if(!userD.getEmail().isEmpty()) {
+		if(userD != null) {
 			List<CartEntity> cartProducts = cartRepository.findAllByUserId(userId);
 			for (CartEntity cartEntity : cartProducts) {
-				cartRepository.delete(cartEntity);
+				System.out.println(cartEntity);
+				cartRepository.deleteAllProducts(userId);
 				return "Cart is empty. Order placed.";
 			}
 		}
 		return "User doesn't exist in the cart";
+		
 	}
 		
 	

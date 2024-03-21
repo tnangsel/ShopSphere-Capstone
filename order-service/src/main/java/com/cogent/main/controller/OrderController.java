@@ -15,6 +15,7 @@ import com.cogent.main.dto.CartDao;
 import com.cogent.main.dto.OrderDao;
 import com.cogent.main.dto.ProductDao;
 import com.cogent.main.dto.UserDao;
+import com.cogent.main.entity.OrderEntity;
 import com.cogent.main.entity.ProductEntity;
 import com.cogent.main.feignclient.AdminClientInOrder;
 import com.cogent.main.feignclient.CartClientInOrder;
@@ -41,9 +42,9 @@ public class OrderController {
 	@Autowired
 	private AdminClientInOrder adminClientInOrder;
 	
-	@GetMapping("/{userId}")
-    public OrderDao listUserOrders(@PathVariable("userId") Integer userId, @RequestHeader("Authorization") String header) {
-        return orderService.getUserOrders(userId, header);
+	@GetMapping("/{email}")
+    public List<OrderEntity> listUserOrders(@PathVariable("email") String email, @RequestHeader("Authorization") String header) {
+        return orderService.getUserOrders(email, header);
     }
 	
 
@@ -52,7 +53,7 @@ public class OrderController {
         return orderService.newUserOrder(userId, products, header);
     }
 
-
+    
     
 
     //----------------------FeignClient methods calling--------------------

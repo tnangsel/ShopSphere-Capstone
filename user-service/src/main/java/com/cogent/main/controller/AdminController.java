@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cogent.main.dao.UserDao;
 import com.cogent.main.dto.DiscountDao;
+import com.cogent.main.dto.DiscountEntity;
 import com.cogent.main.dto.OrderDao;
 import com.cogent.main.dto.ProductDao;
 import com.cogent.main.dto.ProductEntity;
+
 import com.cogent.main.entity.UserEntity;
 import com.cogent.main.feignclient.DiscountClientInAdmin;
 import com.cogent.main.feignclient.OrderClientInAdmin;
@@ -95,6 +97,11 @@ public class AdminController {
 
 	// -----------------------Discount manage methods---------------------------------
 
+	@GetMapping("/discounts")
+	public List<DiscountEntity> fetchAllDiscount() {
+		return discountClientInAdmin.fetchAllDiscount();
+	}
+	
 	@PostMapping("/addDiscount")
 	public DiscountDao insertDiscount(@RequestBody DiscountDao discountDao,
 			@RequestHeader("Authorization") String header) {

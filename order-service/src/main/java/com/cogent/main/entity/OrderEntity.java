@@ -2,8 +2,12 @@ package com.cogent.main.entity;
 
 import java.util.List;
 
+import com.cogent.main.dto.UserDao;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,10 +31,10 @@ public class OrderEntity {
 
 	private String status;
 	
-	@OneToOne
-    private UserEntity user;
+	@Embedded
+    private UserDao user;
 	
-	@OneToMany(cascade = CascadeType.ALL) 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) 
     @JoinColumn(name = "order_id") 
     private List<ProductEntity> products;
 }

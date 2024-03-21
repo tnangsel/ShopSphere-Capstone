@@ -13,18 +13,18 @@ import com.cogent.main.dto.UserDao;
 import com.cogent.main.entity.CategoryEntity;
 import com.cogent.main.entity.OrderEntity;
 import com.cogent.main.entity.ProductEntity;
-import com.cogent.main.entity.UserEntity;
+
 import com.cogent.main.feignclient.CartClientInOrder;
 import com.cogent.main.feignclient.ProductClientInOrder;
 import com.cogent.main.feignclient.UserClientInOrder;
 import com.cogent.main.repository.OrderRepository;
-import com.cogent.main.repository.UserRepository;
+
 
 @Service
 public class OrderService {
 
-	@Autowired
-	private UserRepository userRepository;
+//	@Autowired
+//	private UserRepository userRepository;
 	
 	@Autowired
 	private OrderRepository orderRepository;
@@ -43,50 +43,50 @@ public class OrderService {
 	public OrderDao newUserOrder(Integer userId, List<ProductEntity> products, String header) {
 			
 			UserDao userDao = userClientInOrder.getOneUser(userId, header);
-			UserEntity userEntity = UserEntity.builder()
-					.name(userDao.getName())
-					.address(userDao.getAddress())
-					.email(userDao.getEmail())
-					.build();
-			userRepository.save(userEntity);
+//			UserEntity userEntity = UserEntity.builder()
+//					.name(userDao.getName())
+//					.address(userDao.getAddress())
+//					.email(userDao.getEmail())
+//					.build();
+//			userRepository.save(userEntity);
 			OrderEntity newOrder = OrderEntity.builder()
-					.user(userEntity)
+					.user(userDao)
 					.products(products)
-					.status("ordered")
+					.status("Ordered")
 					.build();
 			orderRepository.save(newOrder);
-			
+			cartClient.emptyMyCart(userId, header);
 			return OrderDao.builder()
-					.user(newOrder.getUser())
+					.user(userDao)
 					.products(newOrder.getProducts())
 					.status(newOrder.getStatus())
 					.build();
 		
 	}
 
-	public OrderDao getUserOrders(Integer userId, String header) {
-		
-			List<CartDao> cartDaos = cartClient.getProductsInCart(userId, header);
-			if (cartDaos.get(0).getProduct_id() != 0) {
-				System.out.println("Here");
-				List<ProductEntity> listProducts = new ArrayList<ProductEntity>();
-				
-				for (CartDao cartDao : cartDaos) {
-					ProductDao productDao = productClient.getProductById(cartDao.getProduct_id());
-					ProductEntity productE = ProductEntity.builder().title(productDao.getTitle())
-							.description(productDao.getDescription())
-							.category(CategoryEntity.builder().name(productDao.getCategory().getName()).build())
-							.price(productDao.getPrice()).build();
-					listProducts.add(productE);
-				}
-				UserDao userDao = userClientInOrder.getOneUser(userId, header);
-					UserEntity userEntity = UserEntity.builder().name(userDao.getName())
-							.address(userDao.getAddress()).email(userDao.getEmail()).build();
-					return OrderDao.builder().status("pending").user(userEntity).products(listProducts).build();
-				
-			} else {
-				return null;
-			}
+	public List<OrderEntity> getUserOrders(String email, String header) {
+		return orderRepository.findAllByEmail(email);
+//			List<CartDao> cartDaos = cartClient.getProductsInCart(userId, header);
+//			if (cartDaos.get(0).getProduct_id() != 0) {
+////				System.out.println("Here");
+//				List<ProductEntity> listProducts = new ArrayList<ProductEntity>();
+//				
+//				for (CartDao cartDao : cartDaos) {
+//					ProductDao productDao = productClient.getProductById(cartDao.getProduct_id());
+//					ProductEntity productE = ProductEntity.builder().title(productDao.getTitle())
+//							.description(productDao.getDescription())
+//							.category(CategoryEntity.builder().name(productDao.getCategory().getName()).build())
+//							.price(productDao.getPrice()).build();
+//					listProducts.add(productE);
+//				}
+//				UserDao userDao = userClientInOrder.getOneUser(userId, header);
+////					UserEntity userEntity = UserEntity.builder().name(userDao.getName())
+////							.address(userDao.getAddress()).email(userDao.getEmail()).build();
+//					return OrderDao.builder().status("Ordered").user(userDao).products(listProducts).build();
+//				
+//			} else {
+//				return null;
+//			}
 		
 	}
 	
@@ -121,10 +121,7 @@ public class OrderService {
 			productEntities.add(productEntity);
 		}
 		OrderEntity orderEntity = OrderEntity.builder()
-				.user(UserEntity.builder().name(userDao.getName())
-						.address(userDao.getAddress())
-						.email(userDao.getEmail())
-						.build())
+				.user(userDao)
 				.products(productEntities).build();
 		orderRepository.save(orderEntity);
 		return OrderDao.builder()

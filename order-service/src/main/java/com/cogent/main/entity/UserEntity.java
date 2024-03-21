@@ -12,24 +12,24 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-@Entity
-@Builder
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserEntity {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	@Embedded
-	private NameDao name;
-	
-	private String email;
-	
-	@Embedded
-	private AddressDao address;
-	
-	
-}
+//
+//@Entity
+//@Builder
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//public class UserEntity {
+//	
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private int id;
+//	@Embedded
+//	private NameDao name;
+//	
+//	private String email;
+//	
+//	@Embedded
+//	private AddressDao address;
+//	
+//	
+//}
